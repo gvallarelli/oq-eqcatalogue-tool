@@ -61,7 +61,7 @@ CREATE TABLE event (
     min_distance REAL,
 
     -- Maximum source to station distance.
-    max_distance REAL,
+    max_distance REAL
 );
 
 
