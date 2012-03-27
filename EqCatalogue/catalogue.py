@@ -28,6 +28,11 @@ def is_empty_transf(str_value):
         return None
     return str_value
 
+def default_value(num_value):
+    if not num_value:
+        num_value = 0
+    return num_value
+
 STR_TRANSF = [str, str.strip, is_empty_transf]
 INT_TRANSF = [int]
 FLOAT_TRANSF = [float]

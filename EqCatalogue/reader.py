@@ -20,7 +20,7 @@ different formats of earthquake catalogues.
 
 from csv import DictReader
 
-from EqCatalogue.catalogue import CSV_FIELDNAMES, TRANSF_MAP
+from catalogue import CSV_FIELDNAMES, TRANSF_MAP
 
 
 class CsvEqCatalogueReader(object):
@@ -40,7 +40,7 @@ class CsvEqCatalogueReader(object):
         Read method generates csv entries, after applying
         defined transformations.
         """
-        reader = DictReader(self.fileobj, fieldnames=CSV_FIELDNAMES)
+        reader = DictReader(self.fileobj)
         for entry in reader:
             converted_entry = converter.convert(entry)
             yield converted_entry
