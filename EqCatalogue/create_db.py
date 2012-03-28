@@ -48,12 +48,20 @@ def create_data_dict(entry):
         'stations': entry['stations'],
         'azimuth_gap': entry['azimuthGap'],
         'min_distance': entry['minDistance'],
-        'max_distance': entry['maxDistance']}
+        'max_distance': entry['maxDistance'],
+        'origin_id': entry['originID'],
+        'agency': entry['mag_agency'],
+        'm_type': entry['mag_type'],
+        'm_value': entry['magnitude'],
+        'error': entry['magnitudeError'],
+        'num_stations': entry['magStations'],
+        'event_id': None}
 
     return data_dict
 
 
 def parse_catalogue(cat_filename):
+
     converter = Converter()
     cat_fileobj = open(cat_filename)
     reader = CsvEqCatalogueReader(cat_fileobj)
@@ -79,9 +87,17 @@ def insert_entries(db_filename, entries):
                 :semi_minor90, :error_azimuth, :depth_error, :phases,
                 :stations, :azimuth_gap, :min_distance, :max_distance);"""
 
+        query_magnitude = """insert into magnitude(origin_id, agency, m_type,
+            m_value, error, num_stations, event_id)
+            values(:origin_id, :agency, :m_type, :m_value, :error,
+                    :num_stations, :event_id);"""
+
         for entry in entries:
             data_dict = create_data_dict(entry)
             cursor.execute(query_event, data_dict)
+            data_dict['event_id'] = cursor.lastrowid
+            cursor.execute(query_magnitude, data_dict)
+
 
 if __name__ == '__main__':
 

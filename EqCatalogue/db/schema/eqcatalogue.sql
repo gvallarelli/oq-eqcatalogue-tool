@@ -89,5 +89,5 @@ CREATE TABLE magnitude(
 
     CONSTRAINT fk_mag_event
         FOREIGN KEY(event_id)
-        REFERENCES event(int_id)
+        REFERENCES event(id)
 );
