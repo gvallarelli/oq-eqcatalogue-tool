@@ -30,7 +30,7 @@ def create_data_dict(entry):
                     entry['Latitude'], entry['Longitude'], SRID)
 
     ev_time = time(entry['year'], entry['month'], entry['day'],
-            entry['hour'], int(entry['second'])).isoformat()
+            entry['hour'], int(entry['second'])).isoformat(' ')
 
     data_dict = {'id_event': entry['eventKey'],
         'id_solution': entry['solutionKey'],
