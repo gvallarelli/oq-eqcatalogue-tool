@@ -85,6 +85,7 @@ select AsText(geometry) from polygon;
 -- 15.9217, 36.5643 (deleting...)
 
 -- These points are considered to be contained:
+-- Multi row insert is supported by sqlite 3.7.x
 
 insert into point(geometry)
 values(GeomFromText('POINT(20.9376 35.5016)', 4326));
@@ -177,5 +178,9 @@ insert into point(geometry)
 values (GeomFromText('POINT(12.5397 38.1158)', 4326));
 
 -- Events within a distance of (e.g. 300 km) from point (Lon, Lat)
-select Distance((select geometry from point where id=1), geometry)
-from point;
+-- Distance returns a value in degrees using 4326(Spatialite 3.0 is required).
+
+select p2.id, AsText(p2.geometry)
+from point p1, point p2
+where p1.id = 1 and
+PtDistWithin(p2.geometry, p1.geometry, 300000.0);
