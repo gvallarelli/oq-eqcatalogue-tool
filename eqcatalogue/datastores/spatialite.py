@@ -30,7 +30,7 @@ from eqcatalogue.models import (EventSource, Event, MagnitudeMeasure, Agency,
 
 DLL_LIBRARY = "libspatialite.dll"
 DYLIB_LIBRARY = "libspatialite.dylib"
-SO_LIBRARY = "libspatialite.so"
+SO_LIBRARY = "libspatialite.so.3"
 
 
 class Engine(object):
@@ -106,6 +106,8 @@ class Engine(object):
             'catalogue_agency', metadata,
             sqlalchemy.Column('id',
                               sqlalchemy.Integer, primary_key=True),
+            sqlalchemy.Column('name',
+                              sqlalchemy.String(), nullable=True), 
             sqlalchemy.Column('created_at',
                               sqlalchemy.DateTime, default=datetime.now()),
             sqlalchemy.Column('source_key',

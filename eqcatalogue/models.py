@@ -88,9 +88,10 @@ class Agency(object):
     def __repr__(self):
         return "Agency %s" % self.source_key
 
-    def __init__(self, source_key, eventsource):
+    def __init__(self, source_key, eventsource, name=None):
         self.source_key = source_key
         self.eventsource = eventsource
+        self.name = name
 
 
 class Event(object):
@@ -417,6 +418,9 @@ class CatalogueDatabase(object):
 
     __metaclass__ = Workspace
 
+    MEASURE_AGENCIES = 'available_measure_agencies'
+    MEASURE_SCALES = 'available_measure_scales'
+
     def __init__(self, drop=False, engine=DEFAULT_ENGINE, **engine_params):
         log.LOG.info("initializing Catalogue Database (engine=%s, params %s)",
                      engine, engine_params)
@@ -493,3 +497,34 @@ class CatalogueDatabase(object):
             obj = class_object(**creation_args)
             self.session.add(obj)
             return obj, True
+
+    def get_available_measure_agencies(self):
+        """
+        Returns a set containing the measure agencies.
+        """
+
+        available_agencies = [magnitude_measure.agency.name
+                                for magnitude_measure in
+                                self.session.query(MagnitudeMeasure).all()]
+        return set(available_agencies)
+
+    def get_available_measure_scales(self):
+        """
+        Returns a set containing the measure scales.
+        """
+
+        available_scales = [magnitude_measure.scale
+                                for magnitude_measure in
+                                self.session.query(MagnitudeMeasure).all()]
+        return set(available_scales)
+
+    def get_summary(self):
+        """
+        Returns a summary dict with informations related
+        to the available measure agencies and scales.
+        """
+
+        return {self.__class__.MEASURE_AGENCIES:
+                    self.get_available_measure_agencies(),
+                self.__class__.MEASURE_SCALES:
+                    self.get_available_measure_scales()}
